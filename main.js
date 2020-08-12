@@ -33,9 +33,7 @@ Vue.component("product", {
     }
   },
   methods: {
-    updateProduct(variant) {
-      this.selectedVariant = variant;
-    },
+
     addToCart() {
       if (this.selectedVariant.stock != 0) {
         this.$emit("add-to-cart", this.selectedVariant);
@@ -74,7 +72,13 @@ var app = new Vue({
   el: '#app',
   data: {
     cart: [],
-    premium: true
+    premium: true,
+    showStyle: {
+      display: "block",
+      "padding-right": "16px",
+      "padding-top": "20px"
+    },
+    displayCart: false
   },
   methods: {
     addToCart(variant) {
@@ -85,6 +89,16 @@ var app = new Vue({
       if (index > -1) {
         this.cart.splice(index, 1);
       }
+    }
+  },
+  computed: {
+    modalStyle() {
+      if (this.displayCart) {
+        return this.showStyle
+      } else {
+        return {}
+      }
+      // return this.displayCart ? this.showStyle : {}
     }
   }
 })

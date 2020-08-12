@@ -16,12 +16,32 @@
       <a class="navbar-brand" href="#">Hola 0048</a>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">Carrito : {{ cart.length }}</a>
+          <a @click="displayCart = true" class="nav-link" href="#">Carrito : {{ cart.length }}</a>
         </li>
       </ul>
     </nav>
     <div class="container mt-5">
       <product :cart="cart" :premium="premium" @add-to-cart="addToCart" @remove-from-cart="removeFromCart"></product>
+    </div>
+    <div class="modal" tabindex="-1" :class="{ show: displayCart }" :style="modalStyle">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="displayCart = false">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Modal body text goes here.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+              @click="displayCart = false">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -46,10 +66,15 @@
           </li>
         </ul>
         <hr>
-        <h4>Variedades</h4>
-        <div class="pl-3" v-for='variant in variants' :key="variant.id">
-          <p v-on:mouseover="updateProduct(variant)">{{ variant.type }}</p>
-        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Variante</label>
+          </div>
+        <select class="custom-select" id="" v-model="selectedVariant">
+          <option v-for='variant in variants' :key="variant.id" :value="variant">{{ variant.type }}</option>
+        </select>
+      </div>
         <a class="a__productos" :href="link">Ver detalle</a>
         <p>Costo de envío: {{shipping}}</p>
         <button class="btn btn-info btn-sm" :disabled="!inStock" @click="addToCart">Agregar al Carro</button>
