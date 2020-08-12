@@ -1,4 +1,10 @@
 Vue.component("product", {
+  props: {
+    premium: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
       description: "ProductoGrarantizado ECamp",
@@ -46,6 +52,9 @@ Vue.component("product", {
     },
     stock() {
       return this.selectedVariant.stock;
+    },
+    shipping() {
+      return this.premium == true ? 'Gratis' : "2000";
     }
   },
   created() {
@@ -57,6 +66,7 @@ var app = new Vue({
   el: '#app',
   data: {
     cart: 0,
+    premium: true
   },
   methods: {
     addToCart(cant) {

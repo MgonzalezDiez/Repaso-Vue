@@ -21,14 +21,14 @@
       </ul>
     </nav>
     <div class="container mt-5">
-      <product @add-to-cart="addToCart" @remove-from-cart="removeFromCart"></product>
+      <product :premium="premium" @add-to-cart="addToCart" @remove-from-cart="removeFromCart"></product>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script type="text/x-template" id="product-template">
     <div class="row pt-5">
       <div class="col-12 col-md-6">
-        <img v-bind:src="img" class="img-thumbnail" />
+        <img style="width:100%" v-bind:src="img" class="img-thumbnail" />
         <!--atributos-->
       </div>
       <div class="col-12 col-md-6">
@@ -51,6 +51,7 @@
           <p v-on:mouseover="updateProduct(variant)">{{ variant.type }}</p>
         </div>
         <a class="a__productos" :href="link">Ver detalle</a>
+        <p>Costo de envío: {{shipping}}</p>
         <button class="btn btn-info btn-sm" :disabled="!inStock" @click="addToCart">Agregar al Carro</button>
         <button class="btn btn-danger btn-sm" @click="removeFromCart">Sacar del Carro</button>
       </div>
