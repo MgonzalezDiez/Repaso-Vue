@@ -16,12 +16,12 @@
       <a class="navbar-brand" href="#">Hola 0048</a>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">{{ cart }}</a>
+          <a class="nav-link" href="#">Carrito : {{ cart.length }}</a>
         </li>
       </ul>
     </nav>
     <div class="container mt-5">
-      <product :premium="premium" @add-to-cart="addToCart" @remove-from-cart="removeFromCart"></product>
+      <product :cart="cart" :premium="premium" @add-to-cart="addToCart" @remove-from-cart="removeFromCart"></product>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
