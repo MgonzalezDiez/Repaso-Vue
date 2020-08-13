@@ -27,24 +27,28 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
+            <h5 class="modal-title">Tu canasta</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="displayCart = false">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Modal body text goes here.</p>
+            <p v-if='!cart.length'>No hay productos en el carro</p>
+            <p v-else v-for='product in cart'>{{ product.type}}
+            </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+            <button type="button" class="btn btn-warning" @click="cart=[]">Vaciar carrito</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal"
               @click="displayCart = false">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
   <script type="text/x-template" id="product-template">
     <div class="row pt-5">
       <div class="col-12 col-md-6">
@@ -60,28 +64,118 @@
         <p v-if='stock > 10'>En Stock</p>
         <p v-else-if='stock <= 10 && stock > 0'>Quedan pocas unidades</p>
         <p v-else>Agotado</p>
-        <ul>
+        <!-- <ul>
           <li v-for='(detail, index) in details' :key="index">
             {{ detail }}
           </li>
         </ul>
-        <hr>
+        <hr> -->
 
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelect01">Variante</label>
           </div>
-        <select class="custom-select" id="" v-model="selectedVariant">
-          <option v-for='variant in variants' :key="variant.id" :value="variant">{{ variant.type }}</option>
-        </select>
-      </div>
-        <a class="a__productos" :href="link">Ver detalle</a>
-        <p>Costo de envío: {{shipping}}</p>
+          <select class="custom-select" id="" v-model="selectedVariant">
+            <option v-for='variant in variants' :key="variant.id" :value="variant">{{ variant.type }}</option>
+          </select>
+        </div>
+        <!-- <a class="a__productos" :href="link">Ver detalle</a> -->
         <button class="btn btn-info btn-sm" :disabled="!inStock" @click="addToCart">Agregar al Carro</button>
         <button class="btn btn-danger btn-sm" @click="removeFromCart">Sacar del Carro</button>
+        <product-tabs :reviews="reviews" :send="shipping" :details="details"></product-tabs>
       </div>
     </div>
   </script>
+
+  <script type="text/x-template" id="tabs-template">
+    <div>
+      <ul class="nav nav-tabs">
+        <li v-for="(tab, index) in tabs" :key="index" @click.prevent="selectedTab=tab"  class="nav-item">
+          <a class="nav-link" href="#">{{tab}}</a>
+        </li>
+      </ul>
+      <reviews-form v-show="selectedTab=='Add Review'"></reviews-form>
+      <review-list :reviews="reviews" v-show="selectedTab=='Ver Reviews'"></review-list>
+      <review-send :send="send" v-show="selectedTab=='Envio'"></review-send>
+      <review-detail :details="details" v-show="selectedTab=='Detalles'"></review-detail>
+    </div>
+  </script>
+
+  <script type="text/x-template" id="template-list">
+    <div>
+      <div v-for="review in reviews"><ul>
+        <li>
+          {{ review.email }} <hr/>
+          {{ review.review }} <hr/>
+          {{ review.rating }}
+        </li>
+      </ul></div>
+    </div>
+  </script>
+
+  <script type="text/x-template" id="template-send">
+    <div>
+      {{ send }}
+    </div>
+  </script>
+
+  <script type="text/x-template" id="template-detail">
+      <div>
+        <ul v-for="(detail, index) in details" :key="index">
+          <li>
+            {{ detail }}
+          </li>
+        </ul>
+      </div>
+    </script>
+
+  <script type="text/x-template" id="template-reviews">
+    <div>
+    <div v-if="errors.length" class="alert alert-warning alert-dismissible">
+      <b>Favor corregir los siguientes errores</b>
+      <ul>
+        <li v-for="error in errors">{{ error }}</li>
+      </ul>
+      <button type="button" @click="errors = []" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <form @submit.prevent="saveReview">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail">Email</label>
+          <input v-model="email" required type="email" class="form-control">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputReview">Review</label>
+          <textarea v-model="review" class="form-control"></textarea>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputState">Notas</label>
+          <select v-model.number="rating" class="form-control">
+            <option selected>Seleccione</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Agregar Review</button>
+    </form>
+    </div>
+  </script>
+
+  <script src="./products/index.js"></script>
+  <script src="./products/tabs.js"></script>
+  <script src="./products/form.js"></script>
+  <script src="./products/send.js"></script>
+  <script src="./products/list.js"></script>
+  <script src="./products/detail.js"></script>
   <script src="main.js"></script>
 
 </body>
